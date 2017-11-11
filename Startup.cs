@@ -38,6 +38,8 @@ namespace FlowBaseAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseMvc();
         }
     }
