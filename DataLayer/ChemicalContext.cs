@@ -14,5 +14,10 @@ namespace FlowBaseAPI.DataLayer
         }
 
         public DbSet<Chemical> Chemicals { get; set; }
+        public DbSet<DisposedChemical> DisposedChemicals {get; set;}
+        public DbSet<Location> Locations {get; set;}
+        public DbSet<TempZone> TempZones {get; set;}
+        public DbSet<User> Users {get; set;}
+        
     }
 }

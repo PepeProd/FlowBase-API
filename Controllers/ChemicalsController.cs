@@ -70,7 +70,7 @@ namespace FlowBaseAPI.Controllers
             return Created("/chemicals", chemicals);
         }
 
-        //// PUT api/chemicals/5
+        // PUT api/chemicals/5
         //[HttpPut("{id}", Name = "UpdateChemical")]
         //public async Task<IActionResult> UpdateChemical(int id, [FromBody] Chemical chemical)
         //{
