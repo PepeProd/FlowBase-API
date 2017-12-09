@@ -96,7 +96,8 @@ namespace FlowBaseAPI.Controllers
                 return NotFound();
             }
 
-            _context.Remove(chemical);
+            _context.Chemicals.Remove(chemical);
+            _context.DisposedChemicals.Add(chemical);
             await _context.SaveChangesAsync();
 
             return Ok(chemical);
