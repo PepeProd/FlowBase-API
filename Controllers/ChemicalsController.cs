@@ -97,6 +97,7 @@ namespace FlowBaseAPI.Controllers
             }
 
             _context.Chemicals.Remove(chemical);
+
             _context.DisposedChemicals.Add(chemical);
             await _context.SaveChangesAsync();
 

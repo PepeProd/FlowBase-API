@@ -29,9 +29,9 @@ namespace FlowBaseAPI.Models
         [Required]
         [JsonProperty(PropertyName = "expiration_date")]
         public DateTime ExpirationDate { get; set; }
-        [Required]
+        /*[Required]
         [JsonProperty(PropertyName = "disposed_date")]
-        public DateTime DisposedDate {get; set;}
+        public DateTime DisposedDate {get; set;}*/
         [Required]
         [JsonProperty(PropertyName = "project_code")]
         public string ProjectCode{ get; set; }
