@@ -49,6 +49,22 @@ namespace FlowBaseAPI.Controllers
             return Created("/Users", Users);
         }
 
+
+        [HttpPost(Name = "ValidateUser")]
+        public async Task<IActionResult> ValidateUser([FromBody] User UserCredentials) {
+            //not sure if i need this
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+
+            var isValidUser = _context.Users == null ? false : _context.Users.Any(u => u.UserName == UserCredentials.UserName && u.Password == UserCredentials.Password);
+
+            if (isValidUser)
+                return Ok(UserCredentials);
+            else
+                return BadRequest();
+        }
+
         // DELETE api/Users/5
         [HttpDelete("{id}", Name = "DeleteUsers")]
         public async Task<IActionResult> DeleteUser(int id)
