@@ -21,5 +21,14 @@ git pull
 
 ./publish.sh
 
+cp deploy-task.json deploy-task-temp.json
+while read -r line
+do
+    version="$line"
+    echo "version"
+done < version.txt
 
-echo "foobar!"
+sed -i -e "s/flowbaseapi:*/flowbaseapi:$version/g" deploy-task-temp.json
+
+aws ecs register-task-definition --cli-input-json file://deploy-task-temp.json
+
