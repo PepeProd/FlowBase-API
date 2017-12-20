@@ -28,7 +28,7 @@ do
     echo "version"
 done < version.txt
 
-sed -i -e "s/flowbaseapi:*/flowbaseapi:$version/g" deploy-task-temp.json
+sed -i -e "s/flowbaseapi:.*/flowbaseapi:$version\",/g" deploy-task-temp.json
 
 aws ecs register-task-definition --cli-input-json file://deploy-task-temp.json
 aws ecs update-service --cluster flowbase-api-cluster --service flowbase-api-service --task-definition flowbase-api-task
