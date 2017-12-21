@@ -15,3 +15,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "FlowBaseAPI.dll"]
 
+ADD Deployment/version.txt .
