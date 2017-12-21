@@ -13,9 +13,9 @@ namespace FlowBaseAPI.Controllers
     [Route("chemicals")]
     public class ChemicalsController : Controller
     {
-        private readonly ChemicalContext _context;
+        private readonly FlowbaseContext _context;
 
-        public ChemicalsController(ChemicalContext context)
+        public ChemicalsController(FlowbaseContext context)
         {
             _context = context;
             _context.SaveChanges();

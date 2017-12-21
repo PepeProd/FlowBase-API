@@ -26,7 +26,7 @@ namespace FlowBaseAPI
         public void ConfigureServices(IServiceCollection services)
         {
             //TODO: Implement sql server connection
-            services.AddDbContext<ChemicalContext>(opt => opt.UseInMemoryDatabase("Chemicals"));
+            services.AddDbContext<FlowbaseContext>(opt => opt.UseInMemoryDatabase("Chemicals"));
             services.AddMvc();
         }
 

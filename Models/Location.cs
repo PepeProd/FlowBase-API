@@ -10,6 +10,6 @@ namespace FlowBaseAPI.Models
 
         [Required]
         [JsonProperty(PropertyName = "location")]
-        public string Location { get; set; }
+        public string Name { get; set; }
     }
 }

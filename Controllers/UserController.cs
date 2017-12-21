@@ -13,9 +13,9 @@ namespace FlowBaseAPI.Controllers
     [Route("Users")]
     public class UserController : Controller
     {
-        private readonly ChemicalContext _context;
+        private readonly FlowbaseContext _context;
 
-        public ChemicalsController(ChemicalContext context)
+        public UserController(FlowbaseContext context)
         {
             _context = context;
             _context.SaveChanges();
@@ -50,14 +50,14 @@ namespace FlowBaseAPI.Controllers
         }
 
 
-        [HttpPost(Name = "ValidateUser")]
-        public async Task<IActionResult> ValidateUser([FromBody] User UserCredentials) {
+        [HttpPost("{login}", Name = "ValidateUser")]
+        public IActionResult ValidateUser([FromBody] User UserCredentials) {
             //not sure if i need this
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            var isValidUser = _context.Users == null ? false : _context.Users.Any(u => u.UserName == UserCredentials.UserName && u.Password == UserCredentials.Password);
+            var isValidUser = _context.Users == null ? false : _context.Users.Any(u => u.Username == UserCredentials.Username && u.Password == UserCredentials.Password);
 
             if (isValidUser)
                 return Ok(UserCredentials);
@@ -76,7 +76,7 @@ namespace FlowBaseAPI.Controllers
             }
 
             _context.Users.Remove(User);
-            await _context.Users.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok(User);
         }

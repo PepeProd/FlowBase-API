@@ -13,9 +13,9 @@ namespace FlowBaseAPI.Controllers
     [Route("TempZones")]
     public class TempZoneController : Controller
     {
-        private readonly ChemicalContext _context;
+        private readonly FlowbaseContext _context;
 
-        public ChemicalsController(ChemicalContext context)
+        public TempZoneController(FlowbaseContext context)
         {
             _context = context;
             _context.SaveChanges();
@@ -60,7 +60,7 @@ namespace FlowBaseAPI.Controllers
             }
 
             _context.TempZones.Remove(TempZone);
-            await _context.TempZones.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok(TempZone);
         }

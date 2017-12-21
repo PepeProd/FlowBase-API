@@ -44,5 +44,27 @@ namespace FlowBaseAPI.Models
         [Required]
         [JsonProperty(PropertyName = "barcode")]
         public long Barcode { get; set; }
+
+        /// <summary>
+        /// Bad cast is bad.
+        /// </summary>
+        /// <param name="c"></param>
+        public static implicit operator DisposedChemical(Chemical c)
+        {
+            return new DisposedChemical
+            {
+                ChemicalName = c.ChemicalName,
+                CommonName = c.CommonName,
+                SiemensMaterialNumber = c.SiemensMaterialNumber,
+                VendorName = c.VendorName,
+                LotNumber = c.LotNumber,
+                ReceiveDate = c.ReceiveDate,
+                ExpirationDate = c.ExpirationDate,
+                ProjectCode = c.ProjectCode,
+                StorageTemperature = c.StorageTemperature,
+                Location = c.Location,
+                Barcode = c.Barcode
+            };
+        }
     }
 }

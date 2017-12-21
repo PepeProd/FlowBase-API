@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlowBaseAPI.DataLayer
 {
-    public class ChemicalContext : DbContext
+    public class FlowbaseContext : DbContext
     {
-        public ChemicalContext(DbContextOptions<ChemicalContext> options) : base(options)
+        public FlowbaseContext(DbContextOptions<FlowbaseContext> options) : base(options)
         {
         }
 

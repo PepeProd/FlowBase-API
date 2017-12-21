@@ -13,9 +13,9 @@ namespace FlowBaseAPI.Controllers
     [Route("Location")]
     public class LocationController : Controller
     {
-        private readonly ChemicalContext _context;
+        private readonly FlowbaseContext _context;
 
-        public ChemicalsController(ChemicalContext context)
+        public LocationController(FlowbaseContext context)
         {
             _context = context;
             _context.SaveChanges();
@@ -59,8 +59,8 @@ namespace FlowBaseAPI.Controllers
                 return NotFound();
             }
 
-            _context.Location.Remove(location);
-            await _context.Location.SaveChangesAsync();
+            _context.Remove(location);
+            await _context.SaveChangesAsync();
 
             return Ok(location);
         }
