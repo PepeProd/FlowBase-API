@@ -87,21 +87,27 @@ namespace FlowBaseAPI.Controllers
         //}
 
         // DELETE api/chemicals/5
-        [HttpDelete("{id}", Name = "DeleteChemical")]
-        public async Task<IActionResult> DeleteChemical(int id)
+        [HttpDelete("{barcode}", Name = "DeleteChemical")]
+        public async Task<IActionResult> DeleteChemical(string barcode)
         {
-            var chemical = _context.Chemicals.FirstOrDefault(u => u.Id == id);
-            if (chemical == null)
-            {
-                return NoContent();
+            long barcodeAsLong = 0;
+            var isInt64 = Int64.TryParse(barcode, out barcodeAsLong);
+            if (isInt64) {
+                var chemical = _context.Chemicals.FirstOrDefault(u => u.Barcode == barcodeAsLong);
+                if (chemical == null)
+                {
+                    return NoContent();
+                }
+
+                _context.Chemicals.Remove(chemical);
+
+                _context.DisposedChemicals.Add(chemical);
+                await _context.SaveChangesAsync();
+
+                return Ok(chemical);
+            } else {
+                return BadRequest();
             }
-
-            _context.Chemicals.Remove(chemical);
-
-            _context.DisposedChemicals.Add(chemical);
-            await _context.SaveChangesAsync();
-
-            return Ok(chemical);
         }
     }
 }
