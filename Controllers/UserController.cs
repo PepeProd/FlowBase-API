@@ -41,7 +41,11 @@ namespace FlowBaseAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            foreach (var user in Users) {
+                if (_context.Users.Any(u => u.UserName == user.UserName) == false) {
+                    return BadRequest();
+                }
+            }
 
             _context.Users.AddRange(Users);
             await _context.SaveChangesAsync();
@@ -64,6 +68,8 @@ namespace FlowBaseAPI.Controllers
             }
 
             if (_context.Users.Any(u => u.UserName == UserCredentials.UserName && u.Password == UserCredentials.Password))
+                var userToValidate = _context.Users.Where(u => u.UserName == UserCredentials.UserName && u.Password == UserCredentials.Password)
+                UserCredentials.Email = userToValidate.Email;
                 return Ok(UserCredentials);
             else
                 return Unauthorized();
