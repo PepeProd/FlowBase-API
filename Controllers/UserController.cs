@@ -42,7 +42,7 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
             foreach (var user in Users) {
-                if (_context.Users.Any(u => u.UserName == user.UserName) == false) {
+                if (_context.Users.Any(u => u.UserName == user.UserName)) {
                     return BadRequest();
                 }
             }

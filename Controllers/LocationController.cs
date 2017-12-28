@@ -42,6 +42,11 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            foreach (var location in locations) {
+                if (_context.Locations.Any(u => u.Name == location.Name)) {
+                    return BadRequest();
+                }
+            }
 
             _context.Locations.AddRange(locations);
             await _context.SaveChangesAsync();
@@ -51,9 +56,9 @@ namespace FlowBaseAPI.Controllers
 
         // DELETE api/locations/5
         [HttpDelete("{id}", Name = "DeleteLocation")]
-        public async Task<IActionResult> DeleteLocation(int id)
+        public async Task<IActionResult> DeleteLocation(string name)
         {
-            var location = _context.Locations.FirstOrDefault(u => u.Id == id);
+            var location = _context.Locations.FirstOrDefault(u => u.Name == name);
             if (location == null)
             {
                 return NoContent();

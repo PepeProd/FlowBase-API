@@ -42,7 +42,11 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-
+            foreach (var tempZone in tempZones) {
+                if (_context.TempZones.Any(u => u.StorageTemperature == tempZone.StorageTemperature)) {
+                    return BadRequest();
+                }
+            }
             _context.TempZones.AddRange(TempZones);
             await _context.SaveChangesAsync();
 
@@ -51,9 +55,9 @@ namespace FlowBaseAPI.Controllers
 
         // DELETE api/TempZones/5
         [HttpDelete("{id}", Name = "DeleteTempZones")]
-        public async Task<IActionResult> DeleteTempZone(int id)
+        public async Task<IActionResult> DeleteTempZone(string tempZoneName)
         {
-            var TempZone = _context.TempZones.FirstOrDefault(u => u.Id == id);
+            var TempZone = _context.TempZones.FirstOrDefault(u => u.StorageTemperature == tempZoneName);
             if (TempZone == null)
             {
                 return NoContent();
