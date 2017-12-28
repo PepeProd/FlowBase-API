@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlowBaseAPI.Controllers
 {
-    [Route("disposedChemicals")]
+    [Route("chemicals/disposed")]
     public class DisposedChemicalsController : Controller
     {
         private readonly FlowbaseContext _context;

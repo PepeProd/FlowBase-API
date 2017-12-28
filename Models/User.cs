@@ -16,7 +16,7 @@ namespace FlowBaseAPI.Models
         public string Email { get; set; }
         [Required]
         [JsonProperty(PropertyName = "notifications")]
-        public bool notifications { get; set; }
+        public bool Notifications { get; set; }
         [Required]
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }

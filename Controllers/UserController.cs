@@ -28,7 +28,7 @@ namespace FlowBaseAPI.Controllers
             var Users = _context.Users;
             if (Users == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return new ObjectResult(Users);
         }
@@ -49,20 +49,24 @@ namespace FlowBaseAPI.Controllers
             return Created("/Users", Users);
         }
 
-
-        [HttpPost("{login}", Name = "ValidateUser")]
+        [Route("Users/ValidateUser/")]
+        [HttpPost(Name = "ValidateUser")]
         public IActionResult ValidateUser([FromBody] User UserCredentials) {
             //not sure if i need this
+            var users = _context.Users;
+            if(_context.Users == null)
+            {
+                return NoContent();
+            }
+
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            var isValidUser = _context.Users == null ? false : _context.Users.Any(u => u.Username == UserCredentials.Username && u.Password == UserCredentials.Password);
-
-            if (isValidUser)
+            if (_context.Users.Any(u => u.UserName == UserCredentials.UserName && u.Password == UserCredentials.Password))
                 return Ok(UserCredentials);
             else
-                return BadRequest();
+                return Unauthorized();
         }
 
         // DELETE api/Users/5
@@ -72,7 +76,7 @@ namespace FlowBaseAPI.Controllers
             var User = _context.Users.FirstOrDefault(u => u.Id == id);
             if (User == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _context.Users.Remove(User);

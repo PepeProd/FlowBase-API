@@ -28,7 +28,7 @@ namespace FlowBaseAPI.Controllers
             var TempZones = _context.TempZones;
             if (TempZones == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return new ObjectResult(TempZones);
         }
@@ -56,7 +56,7 @@ namespace FlowBaseAPI.Controllers
             var TempZone = _context.TempZones.FirstOrDefault(u => u.Id == id);
             if (TempZone == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _context.TempZones.Remove(TempZone);

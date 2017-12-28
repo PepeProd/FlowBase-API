@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlowBaseAPI.Controllers
 {
-    [Route("Location")]
+    [Route("Locations")]
     public class LocationController : Controller
     {
         private readonly FlowbaseContext _context;
@@ -28,7 +28,7 @@ namespace FlowBaseAPI.Controllers
             var locations = _context.Locations;
             if (locations == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return new ObjectResult(locations);
         }
@@ -56,7 +56,7 @@ namespace FlowBaseAPI.Controllers
             var location = _context.Locations.FirstOrDefault(u => u.Id == id);
             if (location == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _context.Remove(location);

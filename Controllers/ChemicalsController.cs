@@ -28,7 +28,7 @@ namespace FlowBaseAPI.Controllers
             var chemicals = _context.Chemicals;
             if (chemicals == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return new ObjectResult(chemicals);
         }
@@ -40,7 +40,7 @@ namespace FlowBaseAPI.Controllers
             var chemical = _context.Chemicals.FirstOrDefault(u => u.Id == id);
             if (chemical == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return new ObjectResult(chemical);
         }
@@ -93,7 +93,7 @@ namespace FlowBaseAPI.Controllers
             var chemical = _context.Chemicals.FirstOrDefault(u => u.Id == id);
             if (chemical == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _context.Chemicals.Remove(chemical);
