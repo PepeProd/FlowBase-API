@@ -18,6 +18,7 @@ namespace FlowBaseAPI.DataLayer
         public DbSet<Location> Locations {get; set;}
         public DbSet<TempZone> TempZones {get; set;}
         public DbSet<User> Users {get; set;}
+        public DbSet<MetaData> MetaData {get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,4 +28,6 @@ namespace FlowBaseAPI.DataLayer
         } 
         
     }
+
+
 }

@@ -42,14 +42,13 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
             
-            /*foreach (var user in Users) {
-                if (_context.Users.Any(u => u.UserName == user.UserName)) {
-                    return BadRequest();
-                }
-            }*/
-
-            _context.Users.AddRange(Users);
-            await _context.SaveChangesAsync();
+            try {
+                _context.Users.AddRange(Users);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
             return Created("/Users", Users);
         }
@@ -89,8 +88,13 @@ namespace FlowBaseAPI.Controllers
                 return NoContent();
             }
 
-            _context.Users.Remove(User);
-            await _context.SaveChangesAsync();
+            try {
+                _context.Users.Remove(User);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
             return Ok(User);
         }

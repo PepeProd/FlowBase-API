@@ -56,16 +56,28 @@ namespace FlowBaseAPI.Controllers
 
             //TODO: Store this on DB itself
             //find highest barcode
-            var highestBarcode = _context.Chemicals.Any() ? _context.Chemicals.Max(u => u.Barcode) : Numbers.FirstBarcode;
+            //var highestBarcode = _context.Chemicals.Any() ? _context.Chemicals.Max(u => u.Barcode) : Numbers.FirstBarcode;
 
             //set barcode
             foreach (var chemical in chemicals)
             {
-                chemical.Barcode = ++highestBarcode;
+                //chemical.Barcode = ++highestBarcode;
+                try {
+                    chemical.Barcode = ++_context.MetaData.FirstOrDefault().MaxBarcode;
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception e) {
+                    return BadRequest($"Error: {e.InnerException}");
+                }
             }
 
-            _context.Chemicals.AddRange(chemicals);
-            await _context.SaveChangesAsync();
+            try {
+                _context.Chemicals.AddRange(chemicals);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
             return Created("/chemicals", chemicals);
         }
@@ -93,22 +105,26 @@ namespace FlowBaseAPI.Controllers
         {
             long barcodeAsLong = 0;
             var isInt64 = Int64.TryParse(barcode, out barcodeAsLong);
-            if (isInt64) {
-                var chemical = _context.Chemicals.FirstOrDefault(u => u.Barcode == barcodeAsLong);
-                if (chemical == null)
-                {
-                    return NoContent();
-                }
 
+            if (!isInt64)
+                return BadRequest();
+
+            var chemical = _context.Chemicals.FirstOrDefault(u => u.Barcode == barcodeAsLong);
+            if (chemical == null)
+            {
+                return NoContent();
+            }
+
+            try {
                 _context.Chemicals.Remove(chemical);
-
                 _context.DisposedChemicals.Add(chemical);
                 await _context.SaveChangesAsync();
-
-                return Ok(chemical);
-            } else {
-                return BadRequest();
             }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
+
+            return Ok(chemical);
         }
     }
 }

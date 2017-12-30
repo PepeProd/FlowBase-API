@@ -42,13 +42,13 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            /*foreach (var tempZone in tempZones) {
-                if (_context.TempZones.Any(u => u.StorageTemperature == tempZone.StorageTemperature)) {
-                    return BadRequest();
-                }
-            }*/
-            _context.TempZones.AddRange(TempZones);
-            await _context.SaveChangesAsync();
+            try {
+                _context.TempZones.AddRange(TempZones);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
             return Created("/TempZones", TempZones);
         }
@@ -63,8 +63,13 @@ namespace FlowBaseAPI.Controllers
                 return NoContent();
             }
 
-            _context.TempZones.Remove(TempZone);
-            await _context.SaveChangesAsync();
+            try {
+                _context.TempZones.Remove(TempZone);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
             return Ok(TempZone);
         }
