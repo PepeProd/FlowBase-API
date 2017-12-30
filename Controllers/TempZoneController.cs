@@ -42,11 +42,11 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            foreach (var tempZone in tempZones) {
+            /*foreach (var tempZone in tempZones) {
                 if (_context.TempZones.Any(u => u.StorageTemperature == tempZone.StorageTemperature)) {
                     return BadRequest();
                 }
-            }
+            }*/
             _context.TempZones.AddRange(TempZones);
             await _context.SaveChangesAsync();
 

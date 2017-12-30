@@ -86,6 +86,7 @@ namespace FlowBaseAPI.Controllers
         //    return Ok();
         //}
 
+        //change to post and add developer delete from database
         // DELETE api/chemicals/5
         [HttpDelete("{barcode}", Name = "DeleteChemical")]
         public async Task<IActionResult> DeleteChemical(string barcode)
