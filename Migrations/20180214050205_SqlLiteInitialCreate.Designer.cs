@@ -11,15 +11,14 @@ using System;
 namespace FlowBaseAPI.Migrations
 {
     [DbContext(typeof(FlowbaseContext))]
-    [Migration("20171230054914_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20180214050205_SqlLiteInitialCreate")]
+    partial class SqlLiteInitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("FlowBaseAPI.Models.Chemical", b =>
                 {
@@ -115,6 +114,18 @@ namespace FlowBaseAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("FlowBaseAPI.Models.MetaData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("MaxBarcode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MetaData");
                 });
 
             modelBuilder.Entity("FlowBaseAPI.Models.TempZone", b =>

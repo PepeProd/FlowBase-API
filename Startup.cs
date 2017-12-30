@@ -29,8 +29,8 @@ namespace FlowBaseAPI
             //services.AddDbContext<FlowbaseContext>(opt => opt.UseInMemoryDatabase("Chemicals"));
             services.AddMvc();
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=flowbasedb;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<FlowbaseContext>(options => options.UseSqlServer(connection));
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=flowbasedb;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<FlowbaseContext>(options => options.UseSqlite("Data Source = flowbasedb.db"));
 
         }
 

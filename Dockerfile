@@ -9,6 +9,9 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
+# make sure the database is there?
+RUN dotnet ef database update
+
 # Build runtime image
 FROM microsoft/aspnetcore:2.0
 WORKDIR /app

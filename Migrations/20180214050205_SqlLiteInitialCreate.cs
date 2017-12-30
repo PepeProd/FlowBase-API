@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
 namespace FlowBaseAPI.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class SqlLiteInitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +13,7 @@ namespace FlowBaseAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Barcode = table.Column<long>(nullable: false),
                     ChemicalName = table.Column<string>(nullable: false),
                     CommonName = table.Column<string>(nullable: false),
@@ -37,7 +36,7 @@ namespace FlowBaseAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Barcode = table.Column<long>(nullable: false),
                     ChemicalName = table.Column<string>(nullable: false),
                     CommonName = table.Column<string>(nullable: false),
@@ -60,7 +59,7 @@ namespace FlowBaseAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -69,11 +68,24 @@ namespace FlowBaseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MetaData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MaxBarcode = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MetaData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TempZones",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     StorageTemperature = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -86,7 +98,7 @@ namespace FlowBaseAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Email = table.Column<string>(nullable: false),
                     Notifications = table.Column<bool>(nullable: false),
                     Password = table.Column<string>(nullable: false),
@@ -126,6 +138,9 @@ namespace FlowBaseAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "MetaData");
 
             migrationBuilder.DropTable(
                 name: "TempZones");
