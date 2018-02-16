@@ -72,6 +72,7 @@ namespace FlowBaseAPI.Controllers
             }
 
             try {
+                //need to add each chemical one at a time to prevent bug when add multiple chemicals where barcode is duplicated
                 _context.Chemicals.AddRange(chemicals);
                 await _context.SaveChangesAsync();
             }

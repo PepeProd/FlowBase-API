@@ -44,7 +44,9 @@ namespace FlowBaseAPI
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            app.UseMvc();
+            app.UseMvc(routes => {
+                routes.MapRoute("default", "{controller=Home/{action=Index}/{id?}}");
+            });
         }
     }
 }
