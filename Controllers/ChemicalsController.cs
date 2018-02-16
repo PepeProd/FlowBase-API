@@ -34,7 +34,7 @@ namespace FlowBaseAPI.Controllers
         }
 
         // GET api/chemicals/5
-        [HttpGet("{id}", Name = "GetChemical")]
+        [HttpGet("/{id}", Name = "GetChemical")]
         public IActionResult GetChemical(int id)
         {
             var chemical = _context.Chemicals.FirstOrDefault(u => u.Id == id);

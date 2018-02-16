@@ -34,8 +34,7 @@ namespace FlowBaseAPI.Controllers
         }
 
         // POST api/Users
-        [Route("Users/CreateUser/")]
-        [HttpPost(Name = "CreateUser")]
+        [HttpPost("Users/CreateUser/", Name = "CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] List<User> Users)
         {
             if (!ModelState.IsValid)
@@ -54,8 +53,7 @@ namespace FlowBaseAPI.Controllers
             return Created("/Users", Users);
         }
 
-        [Route("Users/ValidateUser/")]
-        [HttpPost(Name = "ValidateUser")]
+        [HttpPost("Users/ValidateUser/", Name = "ValidateUser")]
         public IActionResult ValidateUser([FromBody] User UserCredentials) {
             //not sure if i need this
             var users = _context.Users;
