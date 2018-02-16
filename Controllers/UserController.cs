@@ -34,6 +34,7 @@ namespace FlowBaseAPI.Controllers
         }
 
         // POST api/Users
+        [Route("Users/CreateUser/")]
         [HttpPost(Name = "CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] List<User> Users)
         {
