@@ -92,14 +92,12 @@ namespace FlowBaseAPI.Controllers
             }
 
             //set barcode
-            var createdChemicals = new List<Chemical>();
             for (var i = 0; i < payload.Quantity; i++)
             {
                 //chemical.Barcode = ++highestBarcode;
                 try {
                     payload.NewChemical.Barcode = ++_context.MetaData.FirstOrDefault().MaxBarcode;
                     _context.Chemicals.Add(payload.NewChemical);
-                    createdChemicals.Add(payload.NewChemical);
                     await _context.SaveChangesAsync();
                 }
                 catch(Exception e) {
@@ -107,7 +105,7 @@ namespace FlowBaseAPI.Controllers
                 }
             }
 
-            return Created("/chemicals", createdChemicals);
+            return Created("/chemicals", payload);
         }
 
         // PUT api/chemicals/5
