@@ -34,7 +34,7 @@ namespace FlowBaseAPI.Controllers
         }
 
         // GET api/chemicals/5
-        [HttpGet("/{id}", Name = "GetChemical")]
+        [HttpGet("{id}", Name = "GetChemical")]
         public IActionResult GetChemical(int id)
         {
             var chemical = _context.Chemicals.FirstOrDefault(u => u.Id == id);
@@ -46,7 +46,7 @@ namespace FlowBaseAPI.Controllers
         }
 
         // POST api/chemicals
-        [HttpPost(Name = "CreateChemicals")]
+        [HttpPost("CreateChemicals",Name = "CreateChemicals")]
         public async Task<IActionResult> CreateChemicals([FromBody] List<Chemical> chemicals)
         {
             if (!ModelState.IsValid)
@@ -81,6 +81,33 @@ namespace FlowBaseAPI.Controllers
             }
 
             return Created("/chemicals", chemicals);
+        }
+
+        [HttpPost("CreateMultipleChemicalsByQuantity", Name = "CreateMultipleChemicalsByQuantity")]
+        public async Task<IActionResult> CreateMultipleChemicalsByQuantity([FromBody] ChemicalQuantityByPayload payload)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //set barcode
+            var createdChemicals = new List<Chemical>();
+            for (var i = 0; i < payload.Quantity; i++)
+            {
+                //chemical.Barcode = ++highestBarcode;
+                try {
+                    payload.NewChemical.Barcode = ++_context.MetaData.FirstOrDefault().MaxBarcode;
+                    _context.Chemicals.Add(payload.NewChemical);
+                    createdChemicals.Add(payload.NewChemical);
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception e) {
+                    return BadRequest($"Error: {e.InnerException}");
+                }
+            }
+
+            return Created("/chemicals", createdChemicals);
         }
 
         // PUT api/chemicals/5
