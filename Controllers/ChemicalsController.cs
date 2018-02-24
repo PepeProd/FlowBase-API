@@ -98,7 +98,7 @@ namespace FlowBaseAPI.Controllers
                 //chemical.Barcode = ++highestBarcode;
                 try {
                     payload.NewChemical.Barcode = ++_context.MetaData.FirstOrDefault().MaxBarcode;
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     createRangeOfChemicals.Add(payload.NewChemical);
                 }
                 catch(Exception e) {
