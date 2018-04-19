@@ -118,20 +118,25 @@ namespace FlowBaseAPI.Controllers
         }
 
         // PUT api/chemicals/5
-        //[HttpPut("{id}", Name = "UpdateChemical")]
-        //public async Task<IActionResult> UpdateChemical(int id, [FromBody] Chemical chemical)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}", Name = "UpdateChemical")]
+        public async Task<IActionResult> UpdateChemical(int id, [FromBody] Chemical chemical)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-        //    chemical.Id = id;
-        //    _context.Chemicals.Update(chemical);
-        //    await _context.SaveChangesAsync();
+            try {
+                chemical.Id = id;
+                _context.Chemicals.Update(chemical);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e) {
+                return BadRequest($"Error: {e.InnerException}");
+            }
 
-        //    return Ok();
-        //}
+            return Ok();
+        }
 
         //change to post and add developer delete from database
         // DELETE api/chemicals/5
