@@ -21,7 +21,6 @@ namespace FlowBaseAPI.Controllers
             _context.SaveChanges();
         }
 
-        // GET api/locations
         [HttpGet(Name = "GetAllLocations")]
         public IActionResult GetAllLocations()
         {
@@ -33,7 +32,6 @@ namespace FlowBaseAPI.Controllers
             return new ObjectResult(locations);
         }
 
-        // POST api/locations
         [HttpPost(Name = "CreateLocation")]
         public async Task<IActionResult> CreateLocation([FromBody] List<Location> locations)
         {
@@ -53,19 +51,21 @@ namespace FlowBaseAPI.Controllers
             return Created("/locations", locations);
         }
 
-        // DELETE api/locations/5
-        [HttpDelete("{id}", Name = "DeleteLocation")]
-        public async Task<IActionResult> DeleteLocation(string name)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteLocation([FromBody] Location postedLocation)
         {
-            var location = _context.Locations.FirstOrDefault(u => u.Name == name);
+            var location = _context.Locations.FirstOrDefault(u => u.Name.ToLower() == postedLocation.Name.ToLower());
             if (location == null)
             {
                 return NoContent();
             }
 
             try {
-            _context.Remove(location);
-            await _context.SaveChangesAsync();
+                if (_context.Chemicals.Any(x => x.Location.ToLower() == postedLocation.Name.ToLower())) {
+                    return BadRequest(_context.Chemicals.Where(x => x.Location.ToLower() == postedLocation.Name.ToLower()).ToList());
+                }
+                _context.Remove(location);
+                await _context.SaveChangesAsync();
             }
             catch(Exception e) {
                 return BadRequest($"Error: {e.InnerException}");

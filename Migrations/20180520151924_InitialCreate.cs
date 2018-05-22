@@ -4,10 +4,26 @@ using System.Collections.Generic;
 
 namespace FlowBaseAPI.Migrations
 {
-    public partial class SqlLiteInitialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ChemicalFamily",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ChemicalName = table.Column<string>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    ReorderQuantity = table.Column<int>(nullable: false),
+                    reorderThreshold = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChemicalFamily", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Chemicals",
                 columns: table => new
@@ -18,12 +34,12 @@ namespace FlowBaseAPI.Migrations
                     ChemicalName = table.Column<string>(nullable: false),
                     CommonName = table.Column<string>(nullable: false),
                     ExpirationDate = table.Column<DateTime>(nullable: false),
-                    Location = table.Column<string>(nullable: false),
+                    Location = table.Column<string>(nullable: true),
                     LotNumber = table.Column<string>(nullable: false),
-                    ProjectCode = table.Column<string>(nullable: false),
+                    ProjectCode = table.Column<string>(nullable: true),
                     ReceiveDate = table.Column<DateTime>(nullable: false),
                     SiemensMaterialNumber = table.Column<string>(nullable: false),
-                    StorageTemperature = table.Column<string>(nullable: false),
+                    StorageTemperature = table.Column<string>(nullable: true),
                     VendorName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -40,6 +56,7 @@ namespace FlowBaseAPI.Migrations
                     Barcode = table.Column<long>(nullable: false),
                     ChemicalName = table.Column<string>(nullable: false),
                     CommonName = table.Column<string>(nullable: false),
+                    DisposalDate = table.Column<DateTime>(nullable: false),
                     ExpirationDate = table.Column<DateTime>(nullable: false),
                     Location = table.Column<string>(nullable: false),
                     LotNumber = table.Column<string>(nullable: false),
@@ -100,6 +117,7 @@ namespace FlowBaseAPI.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Email = table.Column<string>(nullable: false),
+                    Frequency = table.Column<string>(nullable: false),
                     Notifications = table.Column<bool>(nullable: false),
                     Password = table.Column<string>(nullable: false),
                     Username = table.Column<string>(nullable: false)
@@ -108,6 +126,12 @@ namespace FlowBaseAPI.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChemicalFamily_ChemicalName",
+                table: "ChemicalFamily",
+                column: "ChemicalName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_Name",
@@ -130,6 +154,9 @@ namespace FlowBaseAPI.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ChemicalFamily");
+
             migrationBuilder.DropTable(
                 name: "Chemicals");
 

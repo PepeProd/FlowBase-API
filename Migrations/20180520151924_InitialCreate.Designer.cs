@@ -11,8 +11,8 @@ using System;
 namespace FlowBaseAPI.Migrations
 {
     [DbContext(typeof(FlowbaseContext))]
-    [Migration("20180214050205_SqlLiteInitialCreate")]
-    partial class SqlLiteInitialCreate
+    [Migration("20180520151924_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,22 +35,19 @@ namespace FlowBaseAPI.Migrations
 
                     b.Property<DateTime>("ExpirationDate");
 
-                    b.Property<string>("Location")
-                        .IsRequired();
+                    b.Property<string>("Location");
 
                     b.Property<string>("LotNumber")
                         .IsRequired();
 
-                    b.Property<string>("ProjectCode")
-                        .IsRequired();
+                    b.Property<string>("ProjectCode");
 
                     b.Property<DateTime>("ReceiveDate");
 
                     b.Property<string>("SiemensMaterialNumber")
                         .IsRequired();
 
-                    b.Property<string>("StorageTemperature")
-                        .IsRequired();
+                    b.Property<string>("StorageTemperature");
 
                     b.Property<string>("VendorName")
                         .IsRequired();
@@ -58,6 +55,28 @@ namespace FlowBaseAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Chemicals");
+                });
+
+            modelBuilder.Entity("FlowBaseAPI.Models.ChemicalFamily", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ChemicalName")
+                        .IsRequired();
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<int>("ReorderQuantity");
+
+                    b.Property<int>("reorderThreshold");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChemicalName")
+                        .IsUnique();
+
+                    b.ToTable("ChemicalFamily");
                 });
 
             modelBuilder.Entity("FlowBaseAPI.Models.DisposedChemical", b =>
@@ -72,6 +91,8 @@ namespace FlowBaseAPI.Migrations
 
                     b.Property<string>("CommonName")
                         .IsRequired();
+
+                    b.Property<DateTime>("DisposalDate");
 
                     b.Property<DateTime>("ExpirationDate");
 
@@ -150,6 +171,9 @@ namespace FlowBaseAPI.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("Frequency")
                         .IsRequired();
 
                     b.Property<bool>("Notifications");

@@ -20,11 +20,14 @@ namespace FlowBaseAPI.DataLayer
         public DbSet<User> Users {get; set;}
         public DbSet<MetaData> MetaData {get; set;}
 
+        public DbSet<ChemicalFamily> ChemicalFamily {get; set;}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>().HasIndex(u => u.Username).IsUnique();
             builder.Entity<Location>().HasIndex(u => u.Name).IsUnique();
             builder.Entity<TempZone>().HasIndex(u => u.StorageTemperature).IsUnique();
+            builder.Entity<ChemicalFamily>().HasIndex(c => c.ChemicalName).IsUnique();
         } 
         
     }

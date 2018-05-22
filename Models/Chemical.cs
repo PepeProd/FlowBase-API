@@ -30,13 +30,12 @@ namespace FlowBaseAPI.Models
         [Required]
         [JsonProperty(PropertyName = "expiration_date")]
         public DateTime ExpirationDate { get; set; }
-        [Required]
+
         [JsonProperty(PropertyName = "project_code")]
         public string ProjectCode{ get; set; }
-        [Required]
         [JsonProperty(PropertyName = "storage_temperature")]
         public string StorageTemperature{ get; set; }
-        [Required]
+        
         [JsonProperty(PropertyName = "location")]
         public string Location { get; set; }
     }

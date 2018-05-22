@@ -21,7 +21,6 @@ namespace FlowBaseAPI.Controllers
             _context.SaveChanges();
         }
 
-        // GET api/TempZones
         [HttpGet(Name = "GetAllTempZones")]
         public IActionResult GetAllTempZones()
         {
@@ -33,7 +32,6 @@ namespace FlowBaseAPI.Controllers
             return new ObjectResult(TempZones);
         }
 
-        // POST api/TempZone
         [HttpPost(Name = "CreateTempZone")]
         public async Task<IActionResult> CreateTempZone([FromBody] List<TempZone> TempZones)
         {
@@ -53,17 +51,19 @@ namespace FlowBaseAPI.Controllers
             return Created("/TempZones", TempZones);
         }
 
-        // DELETE api/TempZones/5
-        [HttpDelete("{id}", Name = "DeleteTempZones")]
-        public async Task<IActionResult> DeleteTempZone(string tempZoneName)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteTempZone([FromBody] TempZone tempZoneName)
         {
-            var TempZone = _context.TempZones.FirstOrDefault(u => u.StorageTemperature == tempZoneName);
+            var TempZone = _context.TempZones.FirstOrDefault(u => u.StorageTemperature == tempZoneName.StorageTemperature);
             if (TempZone == null)
             {
                 return NoContent();
             }
 
             try {
+                if (_context.Chemicals.Any(x => x.StorageTemperature.ToLower() == tempZoneName.StorageTemperature.ToLower())) {
+                    return BadRequest(_context.Chemicals.Where(x => x.StorageTemperature.ToLower() == tempZoneName.StorageTemperature.ToLower()).ToList());
+                }
                 _context.TempZones.Remove(TempZone);
                 await _context.SaveChangesAsync();
             }
