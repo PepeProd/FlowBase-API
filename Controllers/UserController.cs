@@ -21,7 +21,6 @@ namespace FlowBaseAPI.Controllers
             _context.SaveChanges();
         }
 
-        // GET api/Users
         [HttpGet(Name = "GetAllUsers")]
         public IActionResult GetAllUsers()
         {
@@ -33,7 +32,6 @@ namespace FlowBaseAPI.Controllers
             return new ObjectResult(Users);
         }
 
-        // POST api/Users
         [HttpPost("/Users/CreateUser/", Name = "CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] List<User> Users)
         {
@@ -55,7 +53,7 @@ namespace FlowBaseAPI.Controllers
 
         [HttpPost("/Users/ValidateUser/", Name = "ValidateUser")]
         public IActionResult ValidateUser([FromBody] User UserCredentials) {
-            //not sure if i need this
+
             var users = _context.Users;
             if(_context.Users == null)
             {
@@ -67,9 +65,9 @@ namespace FlowBaseAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Users.Any(u => u.Username == UserCredentials.Username && u.Password == UserCredentials.Password))
+            if (_context.Users.Any(u => u.Username.ToLower() == UserCredentials.Username.ToLower() && u.Password == UserCredentials.Password))
             {
-                var userToValidate = _context.Users.FirstOrDefault(u => u.Username == UserCredentials.Username && u.Password == UserCredentials.Password);
+                var userToValidate = _context.Users.FirstOrDefault(u => u.Username.ToLower() == UserCredentials.Username.ToLower() && u.Password == UserCredentials.Password);
                 UserCredentials.Email = userToValidate.Email;
                 return Ok(UserCredentials);
             }
@@ -77,7 +75,6 @@ namespace FlowBaseAPI.Controllers
                 return Unauthorized();
         }
 
-        // DELETE api/Users/5
         [HttpDelete("{id}", Name = "DeleteUsers")]
         public async Task<IActionResult> DeleteUser(int id)
         {

@@ -20,5 +20,10 @@ namespace FlowBaseAPI.Models
         [Required]
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
+
+        [Required]
+        [JsonProperty(PropertyName="frequency")]
+        public string Frequency {get; set;}
+
     }
 }

@@ -29,9 +29,9 @@ namespace FlowBaseAPI.Models
         [Required]
         [JsonProperty(PropertyName = "expiration_date")]
         public DateTime ExpirationDate { get; set; }
-        /*[Required]
-        [JsonProperty(PropertyName = "disposed_date")]
-        public DateTime DisposedDate {get; set;}*/
+        [Required]
+        [JsonProperty(PropertyName = "disposal_date")]
+        public DateTime DisposalDate { get; set; }
         [Required]
         [JsonProperty(PropertyName = "project_code")]
         public string ProjectCode{ get; set; }
@@ -45,26 +45,5 @@ namespace FlowBaseAPI.Models
         [JsonProperty(PropertyName = "barcode")]
         public long Barcode { get; set; }
 
-        /// <summary>
-        /// Bad cast is bad.
-        /// </summary>
-        /// <param name="c"></param>
-        public static implicit operator DisposedChemical(Chemical c)
-        {
-            return new DisposedChemical
-            {
-                ChemicalName = c.ChemicalName,
-                CommonName = c.CommonName,
-                SiemensMaterialNumber = c.SiemensMaterialNumber,
-                VendorName = c.VendorName,
-                LotNumber = c.LotNumber,
-                ReceiveDate = c.ReceiveDate,
-                ExpirationDate = c.ExpirationDate,
-                ProjectCode = c.ProjectCode,
-                StorageTemperature = c.StorageTemperature,
-                Location = c.Location,
-                Barcode = c.Barcode
-            };
-        }
     }
 }
