@@ -91,7 +91,7 @@ namespace FlowBaseAPI.Controllers
                                 _context.ChemicalFamily.Add(newChemFamily);
                             }
                         } else {
-                            _context.ChemicalFamily.First(x=> x.ChemicalName == chemicalName).Quantity += chemicals.Where(x => x.ChemicalName == chemicalName).Count();
+                            _context.ChemicalFamily.Where(x=> x.ChemicalName.ToLower() == chemicalName.ToLower()).FirstOrDefault().Quantity = _context.ChemicalFamily.Where(x=> x.ChemicalName.ToLower() == chemicalName.ToLower()).FirstOrDefault().Quantity + chemicals.Where(x => x.ChemicalName.ToLower() == chemicalName.ToLower()).Count();
                             await _context.SaveChangesAsync();
                         }
                 }
@@ -310,8 +310,8 @@ namespace FlowBaseAPI.Controllers
             }
         }
 
-        [HttpPost("notifications/sendEmail")]
-        public IActionResult sendExpirationStatusEmail() {
+        [HttpPost("notifications/sendExpireEmail")]
+        public IActionResult SendExpirationStatusEmail() {
             
             if (!_context.ChemicalFamily.Any() || !_context.Users.Any())
                 return BadRequest();
@@ -335,6 +335,9 @@ namespace FlowBaseAPI.Controllers
             var users = _context.Users.Where(x => x.Notifications == true).ToList();
             var emailToList = new List<User>();
 
+            if (chemicalsExpire.Count == 0 && chemicalsSoon.Count == 0)
+                return NoContent();
+
             foreach (var user in users) {
                 if (user.Frequency == Enum.GetName(typeof(frequencyOfEmail), frequencyOfEmail.Daily)) {
                     emailToList.Add(user);
@@ -345,6 +348,10 @@ namespace FlowBaseAPI.Controllers
                     if ((dayOfWeek == 1 && todayDate.Day <= 7) || (todayDate.Day == 1 && dayOfWeek <= 5))
                         emailToList.Add(user); 
                 }
+            }
+
+            if (emailToList.Count == 0) {
+                return NoContent();
             }
 
             var sbExpired = new StringBuilder();
@@ -365,7 +372,7 @@ namespace FlowBaseAPI.Controllers
             if (chemicalsSoon.Count > 0) {
                 sbSoon.AppendLine("The following are the chemical(s) that will expire in the next 2-30 days:<br /><ul>");
                 foreach (var chemical in chemicalsSoon) {
-                    var lineText = "<li>" + chemical.ChemicalName + " with Barcode " + chemical.Barcode.ToString() + " expires on " + chemical.ExpirationDate.ToShortDateString();
+                    var lineText = "<li>" + chemical.ChemicalName + " (Barcode: " + chemical.Barcode.ToString() + ") expires on " + chemical.ExpirationDate.ToShortDateString();
                     if (chemical.Location != null && !string.IsNullOrEmpty(chemical.Location)) {
                         lineText += " found in " + chemical.Location;
                     }
@@ -374,7 +381,7 @@ namespace FlowBaseAPI.Controllers
                 }
                 sbSoon.Append("</ul><br />");
             }
-
+            
             var emailMessageBody = "This is an automated message regarding chemical expiration status. <br /><br />";
 
             emailMessageBody += chemicalsExpire.Count > 0 ? sbExpired.ToString() : "";
@@ -396,11 +403,91 @@ namespace FlowBaseAPI.Controllers
             {
                 msg.To.Add(new MailAddress(to.Email));
             }
-            msg.Subject = "Chemical Inventory Status";
+            msg.Subject = "FlowBase Notification: Expiration Status";
             msg.Body = emailMessageBody;
             client.Send(msg);
 
             return Ok(emailToList);
         }
+
+        [HttpPost("notifications/sendReorderEmail")]
+        public IActionResult SendReorderEmail() {
+            if (!_context.ChemicalFamily.Any() || !_context.Users.Any())
+                    return BadRequest();
+
+            var todayDateShort = DateTime.Now.ToShortDateString();
+            var todayDate = DateTime.Parse(todayDateShort);
+            var dayOfWeek = (int) todayDate.DayOfWeek;
+            var allChemicals = _context.Chemicals.ToList();
+
+            var users = _context.Users.Where(x => x.Notifications == true).ToList();
+
+            if (users.Count == 0) {
+                return NoContent();
+            }
+
+            var emailToList = new List<User>();
+
+            foreach (var user in users) {
+                if (user.Frequency == Enum.GetName(typeof(frequencyOfEmail), frequencyOfEmail.Daily)) {
+                    emailToList.Add(user);
+                } else if (user.Frequency == Enum.GetName(typeof(frequencyOfEmail), frequencyOfEmail.Weekly)) {
+                    if (dayOfWeek == 1) 
+                        emailToList.Add(user);
+                } else if (user.Frequency == Enum.GetName(typeof(frequencyOfEmail), frequencyOfEmail.Monthly)) {
+                    if ((dayOfWeek == 1 && todayDate.Day <= 7) || (todayDate.Day == 1 && dayOfWeek <= 5))
+                        emailToList.Add(user); 
+                }
+            }
+
+            if (emailToList.Count == 0) {
+                return NoContent();
+            }
+
+            var reorderChemicals = _context.ChemicalFamily.Where(x => x.Quantity <= x.reorderThreshold && x.reorderThreshold != -1).OrderBy(x => x.reorderThreshold).ToList();
+
+            if (reorderChemicals.Count == 0)
+                return NoContent();
+
+            var sbReorder = new StringBuilder();
+            if (reorderChemicals.Count > 0) {
+                sbReorder.AppendLine("The following are the chemical(s) that need to be reordered:<br /><ul>");
+                foreach (var chemical in reorderChemicals) {
+                    var lineText = "<li> " + chemical.ChemicalName + " (Current Quantity: " + chemical.Quantity.ToString() + ") needs an order of " + chemical.ReorderQuantity;
+                    lineText += "</li><br />";
+                    sbReorder.AppendLine(lineText);
+                }
+                sbReorder.Append("</ul><br />");
+            }
+
+            var emailMessageBody = "This is an automated message regarding chemical reorder status. <br /><br />";
+
+            emailMessageBody += reorderChemicals.Count > 0 ? sbReorder.ToString() : "";
+
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.googlemail.com";
+            client.Port = 587;
+            client.UseDefaultCredentials = false;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            var emailer = new NetworkCredentials();
+            client.Credentials = new NetworkCredential(emailer.NetworkUserEmail, emailer.NetworkUserPassword);
+            var msg = new MailMessage();
+            msg.IsBodyHtml = true;
+            msg.From = new MailAddress(emailer.NetworkUserEmail);
+            foreach (var to in emailToList)
+            {
+                msg.To.Add(new MailAddress(to.Email));
+            }
+            msg.Subject = "FlowBase Notification: Reorder Status";
+            msg.Body = emailMessageBody;
+            client.Send(msg);
+
+            return Ok(emailToList);
+        }
+        
+        
     }
+
+    
 }
