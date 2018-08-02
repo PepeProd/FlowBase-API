@@ -152,6 +152,8 @@ namespace FlowBaseAPI.Controllers
                     if (originalChemName != null && originalChemName.ToLower() != chemical.ChemicalName.ToLower()) {
                         if (_context.ChemicalFamily.AsNoTracking().Any(x => x.ChemicalName.ToLower() == originalChemName.ToLower()) ) {
                             _context.ChemicalFamily.Where(x => x.ChemicalName.ToLower() == originalChemName.ToLower()).First().Quantity -= 1;
+                            if (_context.ChemicalFamily.Where(x => x.ChemicalName.ToLower() == originalChemName.ToLower()).First().Quantity < 0)
+                                return BadRequest("Quantity below 0");
                             if (_context.ChemicalFamily.AsNoTracking().Any(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower())) {
                                 _context.ChemicalFamily.Where(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower()).First().Quantity += 1;
                             } else {
@@ -209,6 +211,9 @@ namespace FlowBaseAPI.Controllers
 
                 _context.ChemicalFamily.First(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower()).Quantity -= 1;
 
+                if (_context.ChemicalFamily.First(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower()).Quantity < 0)
+                    return BadRequest("Quantity below 0");
+
                 await _context.SaveChangesAsync();
             }
             catch(Exception e) {
@@ -257,6 +262,10 @@ namespace FlowBaseAPI.Controllers
                     _context.DisposedChemicals.Add(disposedChem);
 
                     _context.ChemicalFamily.First(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower()).Quantity -= 1;
+
+                    if (_context.ChemicalFamily.First(x => x.ChemicalName.ToLower() == chemical.ChemicalName.ToLower()).Quantity < 0)
+                        return BadRequest("Quantity below 0");
+
                     await _context.SaveChangesAsync();
                     deletedChemicals.Add(chemical);
                 }
