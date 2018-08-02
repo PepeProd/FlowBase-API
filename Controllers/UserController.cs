@@ -51,6 +51,30 @@ namespace FlowBaseAPI.Controllers
             return Created("/Users", Users);
         }
 
+        [HttpPost("/Users/UpdateUserEmailFrequency", Name="UpdateUserEmailFrequency")]
+        public IActionResult UpdateUserEmailFrequency([FromBody] User UserInfo) {
+            if (_context.Users.Any(u => u.Username == UserInfo.Username)) {
+                _context.Users.FirstOrDefault(u => u.Username == UserInfo.Username).Frequency = UserInfo.Frequency;
+                _context.SaveChanges();
+                return Ok(UserInfo);
+            }
+
+            return BadRequest("No user found");
+
+        }
+
+        [HttpPost("/Users/UpdateUserPassword", Name="UpdateUserPassword")]
+        public IActionResult UpdateUserPassword([FromBody] User UserInfo) {
+            if (_context.Users.Any(u => u.Username == UserInfo.Username)) {
+                _context.Users.FirstOrDefault(u => u.Username == UserInfo.Username).Password = UserInfo.Password;
+                _context.SaveChanges();
+                return Ok(UserInfo);
+            }
+
+            return BadRequest("No user found");
+
+        } 
+
         [HttpPost("/Users/ValidateUser/", Name = "ValidateUser")]
         public IActionResult ValidateUser([FromBody] User UserCredentials) {
 
@@ -69,6 +93,7 @@ namespace FlowBaseAPI.Controllers
             {
                 var userToValidate = _context.Users.FirstOrDefault(u => u.Username.ToLower() == UserCredentials.Username.ToLower() && u.Password == UserCredentials.Password);
                 UserCredentials.Email = userToValidate.Email;
+                UserCredentials.Frequency = userToValidate.Frequency;
                 return Ok(UserCredentials);
             }
             else
