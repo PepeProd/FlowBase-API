@@ -190,6 +190,24 @@ namespace FlowBaseAPI.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("FlowBaseAPI.Models.UserRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("RegistrationCode");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("UserRegistration");
+                });
 #pragma warning restore 612, 618
         }
     }

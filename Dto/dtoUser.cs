@@ -1,24 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
-using FlowBaseAPI.Dto;
 
-namespace FlowBaseAPI.Models
+namespace FlowBaseAPI.Dto
 {
-    public class User
+    public class dtoUser
     {
-        public User () {
-
-        }
-
-        public User(dtoUser newUser) {
-            Username = newUser.Username;
-            Email = newUser.Email;
-            Notifications = newUser.Notifications;
-            Password = newUser.Password;
-            Frequency = newUser.Frequency;
-        }
         public int Id { get; set; }
+
+        [Required]
+        [JsonProperty(PropertyName = "registration_code")]
+        public string registrationCode {get; set;}
 
         [Required]
         [JsonProperty(PropertyName = "username")]
