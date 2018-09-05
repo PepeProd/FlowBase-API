@@ -40,6 +40,7 @@ namespace FlowBaseAPI.Migrations
                     ReceiveDate = table.Column<DateTime>(nullable: false),
                     SiemensMaterialNumber = table.Column<string>(nullable: false),
                     StorageTemperature = table.Column<string>(nullable: true),
+                    VendorCatalogueNumber = table.Column<string>(nullable: false),
                     VendorName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -64,6 +65,7 @@ namespace FlowBaseAPI.Migrations
                     ReceiveDate = table.Column<DateTime>(nullable: false),
                     SiemensMaterialNumber = table.Column<string>(nullable: false),
                     StorageTemperature = table.Column<string>(nullable: false),
+                    VendorCatalogueNumber = table.Column<string>(nullable: false),
                     VendorName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>

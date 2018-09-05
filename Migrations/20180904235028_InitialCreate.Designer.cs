@@ -11,7 +11,7 @@ using System;
 namespace FlowBaseAPI.Migrations
 {
     [DbContext(typeof(FlowbaseContext))]
-    [Migration("20180805162809_InitialCreate")]
+    [Migration("20180904235028_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace FlowBaseAPI.Migrations
                         .IsRequired();
 
                     b.Property<string>("StorageTemperature");
+
+                    b.Property<string>("VendorCatalogueNumber")
+                        .IsRequired();
 
                     b.Property<string>("VendorName")
                         .IsRequired();
@@ -111,6 +114,9 @@ namespace FlowBaseAPI.Migrations
                         .IsRequired();
 
                     b.Property<string>("StorageTemperature")
+                        .IsRequired();
+
+                    b.Property<string>("VendorCatalogueNumber")
                         .IsRequired();
 
                     b.Property<string>("VendorName")

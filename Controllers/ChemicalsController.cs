@@ -199,6 +199,7 @@ namespace FlowBaseAPI.Controllers
                 disposedChem.CommonName = chemical.CommonName;
                 disposedChem.SiemensMaterialNumber = chemical.SiemensMaterialNumber;
                 disposedChem.VendorName = chemical.VendorName;
+                disposedChem.VendorCatalogueNumber = chemical.VendorCatalogueNumber;
                 disposedChem.LotNumber = chemical.LotNumber;
                 disposedChem.ReceiveDate = chemical.ReceiveDate;
                 disposedChem.DisposalDate = DateTime.Now;
@@ -251,6 +252,7 @@ namespace FlowBaseAPI.Controllers
                     disposedChem.CommonName = chemical.CommonName;
                     disposedChem.SiemensMaterialNumber = chemical.SiemensMaterialNumber;
                     disposedChem.VendorName = chemical.VendorName;
+                    disposedChem.VendorCatalogueNumber = chemical.VendorCatalogueNumber;
                     disposedChem.LotNumber = chemical.LotNumber;
                     disposedChem.ReceiveDate = chemical.ReceiveDate;
                     disposedChem.DisposalDate = DateTime.Now;

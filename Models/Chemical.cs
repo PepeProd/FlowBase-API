@@ -22,6 +22,9 @@ namespace FlowBaseAPI.Models
         [JsonProperty(PropertyName = "vendor_name")]
         public string VendorName { get; set; }
         [Required]
+        [JsonProperty(PropertyName = "vendor_catalog_number")]
+        public string VendorCatalogueNumber { get; set; }
+        [Required]
         [JsonProperty(PropertyName = "lot_number")]
         public string LotNumber { get; set; }
         [Required]

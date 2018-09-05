@@ -48,6 +48,9 @@ namespace FlowBaseAPI.Migrations
 
                     b.Property<string>("StorageTemperature");
 
+                    b.Property<string>("VendorCatalogueNumber")
+                        .IsRequired();
+
                     b.Property<string>("VendorName")
                         .IsRequired();
 
@@ -110,6 +113,9 @@ namespace FlowBaseAPI.Migrations
                         .IsRequired();
 
                     b.Property<string>("StorageTemperature")
+                        .IsRequired();
+
+                    b.Property<string>("VendorCatalogueNumber")
                         .IsRequired();
 
                     b.Property<string>("VendorName")
